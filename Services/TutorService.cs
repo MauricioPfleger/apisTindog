@@ -75,9 +75,89 @@ namespace TindogService.Services
             catch
             {
                 connection.Close();
-            }           
+            }
+
+            connection.Close();
 
             return listaTutores;
+        }
+
+        public List<Pet> ConsultarTutorPets(int idTutor)
+        {
+            List<Pet> listaPets = new List<Pet>();
+
+            string connectionString = _configuration.GetConnectionString("MySqlConnection");
+
+            MySqlConnection connection = new MySqlConnection(connectionString);
+
+            string query = Consulta.ConsultaTutorPets();
+
+            MySqlCommand command = new MySqlCommand(query, connection);
+            command.Parameters.Add(new MySqlParameter("@id_tutor", idTutor));
+            connection.Open();
+
+            try
+            {
+                MySqlDataReader reader = command.ExecuteReader();
+
+                while (reader.Read())
+                {
+                    Pet pet = new Pet();
+                    pet.Id = reader.GetInt32("id_pet");
+                    pet.Nome = reader.GetString("nome_pet");
+                    pet.Raca = reader.GetString("nome_raca");
+                    pet.DataNascimento = reader.GetDateTime("dt_nascimento_pet");
+                    pet.Peso = reader.GetDouble("peso_pet");
+                    pet.Genero = reader.GetString("genero_pet");
+                    pet.QtdVacinas = reader.GetInt32("qtd_vacinas_pet");
+                    pet.Pedigree = reader.GetInt32("pedigree_pet") == 1 ? true : false;
+
+                    listaPets.Add(pet);
+                }
+            }
+            catch
+            {
+                connection.Close();
+            }
+
+            connection.Close();
+
+            return listaPets;
+        }
+
+        public Endereco ConsultarTutorEndereco(int idTutor)
+        {
+            Endereco endereco = new Endereco();
+
+            string connectionString = _configuration.GetConnectionString("MySqlConnection");
+
+            MySqlConnection connection = new MySqlConnection(connectionString);
+
+            string query = Consulta.ConsultaTutorEndereco();
+
+            MySqlCommand command = new MySqlCommand(query, connection);
+            command.Parameters.Add(new MySqlParameter("@id_tutor", idTutor));
+            connection.Open();
+
+            try
+            {
+                MySqlDataReader reader = command.ExecuteReader();
+
+                if (reader.Read())
+                {
+                    endereco.Id = reader.GetInt32("id");
+                    // Preencher demais informações do endereço para retornar para a resposta da API
+                    // Obs.: Esta reposta é um objeto, não é uma lista de informações.
+                }
+            }
+            catch
+            {
+                connection.Close();
+            }
+
+            connection.Close();
+
+            return endereco;
         }
     }
 }

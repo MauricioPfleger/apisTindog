@@ -4,7 +4,8 @@
     {
         public static string ConsultaTutor()
         {
-            return $@"select t.nome_tutor,
+            return $@"select 
+                t.nome_tutor,
                 t.sobrenome_tutor,
                 t.dt_nascimento_tutor,
                 t.telefone_tutor,
@@ -36,6 +37,28 @@
                 join raca r on r.id_raca = pe.id_raca
                 join genero pg on pg.id_genero = pe.id_genero
                 where t.nome_tutor = @nome_tutor";
+        }
+
+        public static string ConsultaTutorPets()
+        {
+            return $@"select 
+                pe.nome_pet,
+                r.nome_raca,
+                pe.dt_nascimento_pet,
+                pe.peso_pet,
+                pg.nome_genero genero_pet,
+                pe.qtd_vacinas_pet,
+                pe.pedigree_pet,
+                pe.id_pet
+                from pet pe
+                join raca r on r.id_raca = pe.id_raca
+                join genero pg on pg.id_genero = pe.id_genero
+                where pe.id_tutor = @id_tutor";
+        }
+
+        public static string ConsultaTutorEndereco()
+        {
+            return $@""; // Montar comando para buscar o endereço do tutor
         }
     }
 }
