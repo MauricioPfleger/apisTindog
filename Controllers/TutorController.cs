@@ -68,8 +68,8 @@ namespace TinDog.Controllers
         {
             try
             {
-                Endereco endereco = new Endereco();
-                // Endereco endereco = _tutorService.ConsultarTutorPets(idTutor); chamar o método novo da interface
+                // Endereco endereco = new Endereco();
+                Endereco endereco = _tutorService.ConsultarTutorEndereco(idTutor); 
 
                 if (endereco.Id > 0)
                     return Ok(endereco);
