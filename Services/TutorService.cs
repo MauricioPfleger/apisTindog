@@ -146,6 +146,14 @@ namespace TindogService.Services
                 if (reader.Read())
                 {
                     endereco.Id = reader.GetInt32("id_endereco");
+                    endereco.Rua = reader.GetString("rua_endereco");
+                    endereco.Numero = reader.GetInt32("numero_endereco");
+                    endereco.Bairro = reader.GetString("bairro_endereco");
+                    endereco.Cidade = reader.GetString("nome_cidade");
+                    endereco.Estado = reader.GetString("nome_estado");
+                    endereco.Pais = reader.GetString("nome_pais");
+                    endereco.Cep = reader.GetInt32("cep_endereco");
+                    endereco.Complemento = reader.GetString("complemento_endereco");
                     // Preencher demais informações do endereço para retornar para a resposta da API
                     // Obs.: Esta reposta é um objeto, não é uma lista de informações.
                 }

@@ -58,7 +58,23 @@
 
         public static string ConsultaTutorEndereco()
         {
-            return $@""; // Montar comando para buscar o endereço do tutor
+            return $@"select
+                e.id_endereco,
+                e.id_cidade,
+                e.rua_endereco,
+                e.numero_endereco,
+                e.bairro_endereco,
+                e.cep_endereco,
+                e.complemento_endereco,
+                c.nome_cidade,
+                es.nome_estado,
+                p.nome_pais
+                from endereco e
+                join tutor t on t.id_endereco = e.id_endereco
+                join cidade c on c.id_cidade = e.id_cidade
+                join estado es on es.id_estado = c.id_estado
+                join pais p on p.id_pais = es.id_pais
+                where t.id_tutor = @id_tutor";
         }
     }
 }
