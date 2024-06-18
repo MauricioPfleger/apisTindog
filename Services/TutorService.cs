@@ -117,7 +117,7 @@ namespace TindogService.Services
             }
             catch
             {
-                connection.Close();
+                // connection.Close();
             }
 
             connection.Close();
@@ -145,14 +145,14 @@ namespace TindogService.Services
 
                 if (reader.Read())
                 {
-                    endereco.Id = reader.GetInt32("id");
+                    endereco.Id = reader.GetInt32("id_endereco");
                     // Preencher demais informações do endereço para retornar para a resposta da API
                     // Obs.: Esta reposta é um objeto, não é uma lista de informações.
                 }
             }
             catch
             {
-                connection.Close();
+                // connection.Close();
             }
 
             connection.Close();

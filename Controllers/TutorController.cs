@@ -44,7 +44,7 @@ namespace TinDog.Controllers
         [HttpGet("v1/{idTutor}/pets")]
         [ProducesResponseType(typeof(TutorPetsResponse), (int)HttpStatusCode.OK)]
         [ProducesResponseType(typeof(ErrorResponse), (int)HttpStatusCode.BadRequest)]
-        public IActionResult ConsultarTutor([FromRoute] int idTutor)
+        public IActionResult ConsultarTutorPets([FromRoute] int idTutor)
         {
             try
             {
@@ -69,7 +69,7 @@ namespace TinDog.Controllers
             try
             {
                 Endereco endereco = new Endereco();
-                // var listaPets = _tutorService.ConsultarTutorPets(idTutor); chamar o método novo da interface
+                // Endereco endereco = _tutorService.ConsultarTutorPets(idTutor); chamar o método novo da interface
 
                 if (endereco.Id > 0)
                     return Ok(endereco);
