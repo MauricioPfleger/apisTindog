@@ -68,17 +68,16 @@ namespace TinDog.Controllers
         {
             try
             {
-                // Endereco endereco = new Endereco();
                 Endereco endereco = _tutorService.ConsultarTutorEndereco(idTutor); 
 
-                if (endereco.Id > 0)
+                if (endereco != null)
                     return Ok(endereco);
                 else
-                    return BadRequest(new ErrorResponse() { Mensagem = "" }); // Acrescentar uma mensagem de erro que faça sentido
+                    return BadRequest(new ErrorResponse() { Mensagem = "Endereço ou Tutor não encontrado." }); // Acrescentar uma mensagem de erro que faça sentido
             }
             catch (Exception ex)
             {
-                return BadRequest(new ErrorResponse() { Mensagem = $": {ex.Message}" }); // Acrescentar uma mensagem de erro que faça sentido
+                return BadRequest(new ErrorResponse() { Mensagem = $"Endereço ou Tutor não encontrado.: {ex.Message}" }); // Acrescentar uma mensagem de erro que faça sentido
             }
         }
     }

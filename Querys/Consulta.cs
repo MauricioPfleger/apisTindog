@@ -4,7 +4,7 @@
     {
         public static string ConsultaTutor()
         {
-            return $@"select 
+            return @"select 
                 t.nome_tutor,
                 t.sobrenome_tutor,
                 t.dt_nascimento_tutor,
@@ -41,7 +41,7 @@
 
         public static string ConsultaTutorPets()
         {
-            return $@"select 
+            return @"select 
                 pe.nome_pet,
                 r.nome_raca,
                 pe.dt_nascimento_pet,
@@ -58,7 +58,7 @@
 
         public static string ConsultaTutorEndereco()
         {
-            return $@"select
+            return @"select
                 e.id_endereco,
                 e.id_cidade,
                 e.rua_endereco,
@@ -75,6 +75,30 @@
                 join estado es on es.id_estado = c.id_estado
                 join pais p on p.id_pais = es.id_pais
                 where t.id_tutor = @id_tutor";
+        }
+
+        public static string ConsultaPets()
+        {
+            return @"select 
+                p.id_pet,
+                p.nome_pet,
+                r.nome_raca,
+                p.dt_nascimento_pet,
+                p.peso_pet,
+                g.nome_genero,
+                p.qtd_vacinas_pet,
+                p.pedigree_pet
+                from pet p
+                join raca r on r.id_raca = p.id_raca
+                join genero g on g.id_genero = p.id_genero
+                join tutor t on t.id_tutor = p.id_tutor
+                join endereco e on e.id_endereco = t.id_endereco
+                join cidade c on c.id_cidade = e.id_cidade
+                join estado es on es.id_estado = c.id_estado
+                join pais pa on pa.id_pais = es.id_pais
+                where (pa.id_pais = @id_pais or @id_pais = 0)
+                and (es.id_estado = @id_estado or @id_estado = 0)
+                and (c.id_cidade = @id_cidade or @id_cidade = 0)";
         }
     }
 }
