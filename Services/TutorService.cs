@@ -1,4 +1,5 @@
 ﻿using MySql.Data.MySqlClient;
+using Org.BouncyCastle.Crypto.Macs;
 using System.Configuration;
 using TinDog.Controllers;
 using TindogService.Interfaces;
@@ -125,10 +126,8 @@ namespace TindogService.Services
             return listaPets;
         }
 
-        public Endereco ConsultarTutorEndereco(int idTutor)
+        public Endereco? ConsultarTutorEndereco(int idTutor)
         {
-            Endereco endereco = new Endereco();
-
             string connectionString = _configuration.GetConnectionString("MySqlConnection");
 
             MySqlConnection connection = new MySqlConnection(connectionString);
@@ -145,6 +144,7 @@ namespace TindogService.Services
 
                 if (reader.Read())
                 {
+                    Endereco endereco = new Endereco();
                     endereco.Id = reader.GetInt32("id_endereco");
                     endereco.Rua = reader.GetString("rua_endereco");
                     endereco.Numero = reader.GetInt32("numero_endereco");
@@ -154,18 +154,57 @@ namespace TindogService.Services
                     endereco.Pais = reader.GetString("nome_pais");
                     endereco.Cep = reader.GetInt32("cep_endereco");
                     endereco.Complemento = reader.GetString("complemento_endereco");
-                    // Preencher demais informações do endereço para retornar para a resposta da API
-                    // Obs.: Esta reposta é um objeto, não é uma lista de informações.
+                    connection.Close();
+                    return endereco;
+                }
+                else
+                {
+                    connection.Close();
+                    return null;
                 }
             }
             catch
             {
-                // connection.Close();
+                connection.Close();
+                return null;
+            }
+        }
+
+        public List<Pet> ConsultarPets(int idPais, int idEstado, int idCidade)
+        {
+            List<Pet> listaPets = new List<Pet>();
+
+            string connectionString = _configuration.GetConnectionString("MySqlConnection");
+
+            MySqlConnection connection = new MySqlConnection(connectionString);
+
+            string query = Consulta.ConsultaPets();
+
+            MySqlCommand command = new MySqlCommand(query, connection);
+            command.Parameters.Add(new MySqlParameter("@id_pais", idPais));
+            command.Parameters.Add(new MySqlParameter("@id_estado", idEstado));
+            command.Parameters.Add(new MySqlParameter("@id_cidade", idCidade));
+
+            connection.Open();
+
+            MySqlDataReader consulta = command.ExecuteReader();
+
+            while (consulta.Read())
+            {
+                Pet pet = new Pet();
+                pet.Id = consulta.GetInt32("id_pet");
+                pet.Nome = consulta.GetString("nome_pet");
+                pet.Raca = consulta.GetString("nome_raca");
+                pet.DataNascimento = consulta.GetDateTime("dt_nascimento_pet");
+                pet.Peso = consulta.GetDouble("peso_pet");
+                pet.Genero = consulta.GetString("nome_genero");
+                pet.QtdVacinas = consulta.GetInt32("qtd_vacinas_pet");
+                pet.Pedigree = consulta.GetInt32("pedigree_pet") == 1 ? true : false;
+
+                listaPets.Add(pet);
             }
 
-            connection.Close();
-
-            return endereco;
+            return listaPets;
         }
     }
 }
