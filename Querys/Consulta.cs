@@ -102,5 +102,11 @@
         }
 
         // Acrescentar cada 1 o método estático com a query que buscará a informação no banco de dados
+        public static string ConsultaCidades()
+        {
+            return @"select c.id_cidade, c.nome_cidade, e.nome_estado from cidade c
+                    join estado e on e.id_estado = c.id_estado";
+        }
+
     }
 }
