@@ -1,4 +1,6 @@
-﻿namespace TindogService.Querys
+﻿using TindogService.Objetos;
+
+namespace TindogService.Querys
 {
     public class Consulta
     {
@@ -102,5 +104,11 @@
         }
 
         // Acrescentar cada 1 o método estático com a query que buscará a informação no banco de dados
+
+        public static string ConsultaEstado()
+        {
+            return @"select e.id_estado, e.nome_estado, p.nome_pais from estado e
+            join pais p on p.id_pais = e.id_pais";
+        }
     }
 }

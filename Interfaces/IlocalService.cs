@@ -6,5 +6,7 @@ namespace TindogService.Interfaces
     {
         public List<EstadoResponse> ConsultaEstados();
         public List<CidadeResponse> ConsultaCidades();
+
+
     }
 }
