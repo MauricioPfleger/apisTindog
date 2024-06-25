@@ -100,5 +100,7 @@
                 and (es.id_estado = @id_estado or @id_estado = 0)
                 and (c.id_cidade = @id_cidade or @id_cidade = 0)";
         }
+
+        // Acrescentar cada 1 o método estático com a query que buscará a informação no banco de dados
     }
 }
