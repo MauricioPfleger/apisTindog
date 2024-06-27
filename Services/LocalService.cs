@@ -25,7 +25,7 @@ namespace TindogService.Services
 
             MySqlConnection connection = new MySqlConnection(connectionString);
 
-            string query = Consulta.ConsultaTutorPets();
+            string query = Consulta.ConsultaCidades();
 
             MySqlCommand command = new MySqlCommand(query, connection);
 

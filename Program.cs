@@ -11,6 +11,7 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 builder.Services.AddScoped<ITutorService, TutorService>();
+builder.Services.AddScoped<ILocalService, LocalService>();
 
 var app = builder.Build();
 

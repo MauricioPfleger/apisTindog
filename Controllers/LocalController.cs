@@ -20,7 +20,7 @@ namespace TindogService.Controllers
         // Acrescentar cada 1 a sua API
 
         [HttpGet("v1/lista-cidades")]
-        [ProducesResponseType(typeof(CidadeResponse), (int)HttpStatusCode.OK)]
+        [ProducesResponseType(typeof(List<CidadeResponse>), (int)HttpStatusCode.OK)]
         [ProducesResponseType(typeof(ErrorResponse), (int)HttpStatusCode.BadRequest)]
         public IActionResult ConsultarCidade()
         {
@@ -31,11 +31,11 @@ namespace TindogService.Controllers
                 if (listCidade.Count > 0)
                     return Ok(listCidade);
                 else
-                    return BadRequest(new ErrorResponse() { Mensagem = "Ocorreu um erro ao obter os pets do tutor." });
+                    return BadRequest(new ErrorResponse() { Mensagem = "Ocorreu um erro ao obter as cidades." });
             }
             catch (Exception ex)
             {
-                return BadRequest(new ErrorResponse() { Mensagem = $"Ocorreu um erro ao obter os pets do tutor: {ex.Message}" });
+                return BadRequest(new ErrorResponse() { Mensagem = $"Ocorreu um erro ao obter as cidades: {ex.Message}" });
             }
         }
     }
