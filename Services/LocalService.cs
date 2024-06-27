@@ -15,6 +15,11 @@ namespace TindogService.Services
             _configuration = configuration;
         }
 
+        public List<CidadeResponse> ConsultaCidades()
+        {
+            throw new NotImplementedException();
+        }
+
         // Acrescertar cada 1 o seu método de operação da integração com o banco de dados
 
         public List<EstadoResponse> ConsultaEstados()
@@ -28,7 +33,6 @@ namespace TindogService.Services
                 string query = Consulta.ConsultaEstado();
 
                 MySqlCommand command = new MySqlCommand(query, connection);
-                command.Parameters.Add(new MySqlParameter("@id_tutor", idTutor));
                 connection.Open();
 
                 try
@@ -37,17 +41,12 @@ namespace TindogService.Services
 
                     while (reader.Read())
                     {
-                        Pet pet = new Pet();
-                        pet.Id = reader.GetInt32("id_pet");
-                        pet.Nome = reader.GetString("nome_pet");
-                        pet.Raca = reader.GetString("nome_raca");
-                        pet.DataNascimento = reader.GetDateTime("dt_nascimento_pet");
-                        pet.Peso = reader.GetDouble("peso_pet");
-                        pet.Genero = reader.GetString("genero_pet");
-                        pet.QtdVacinas = reader.GetInt32("qtd_vacinas_pet");
-                        pet.Pedigree = reader.GetInt32("pedigree_pet") == 1 ? true : false;
-
-                        listaPets.Add(pet);
+                        EstadoResponse estado = new EstadoResponse();
+                        estado.Id = reader.GetInt32("id_estado");
+                        estado.Nome = reader.GetString("nome_estado");
+                        estado.NomePais = reader.GetString("nome_pais");
+                       
+                        listaEstado.Add(estado);
                     }
                 }
                 catch
@@ -57,7 +56,7 @@ namespace TindogService.Services
 
                 connection.Close();
 
-                return listaPets;
+                return listaEstado;
             }
     }
 }
