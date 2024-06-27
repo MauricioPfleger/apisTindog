@@ -110,5 +110,11 @@ namespace TindogService.Querys
             return @"select e.id_estado, e.nome_estado, p.nome_pais from estado e
             join pais p on p.id_pais = e.id_pais";
         }
+        public static string ConsultaCidades()
+        {
+            return @"select c.id_cidade, c.nome_cidade, e.nome_estado from cidade c
+                    join estado e on e.id_estado = c.id_estado";
+        }
+
     }
 }
