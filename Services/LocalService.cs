@@ -15,11 +15,6 @@ namespace TindogService.Services
             _configuration = configuration;
         }
 
-        public List<CidadeResponse> ConsultaCidades()
-        {
-            throw new NotImplementedException();
-        }
-
         // Acrescertar cada 1 o seu método de operação da integração com o banco de dados
 
         public List<CidadeResponse> ConsultaCidades()
@@ -59,11 +54,7 @@ namespace TindogService.Services
 
             return listaCidade;
         }
-
-        public List<EstadoResponse> ConsultaEstados()
-        {
-            throw new NotImplementedException();
-        }
+ 
 
         public List<EstadoResponse> ConsultaEstados()
         { 
