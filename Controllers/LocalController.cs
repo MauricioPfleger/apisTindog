@@ -17,7 +17,7 @@ namespace TindogService.Controllers
             _localService = localService;
         }
 
-        [HttpGet("v1/{lista-estados")]
+        [HttpGet("v1/lista-estados")]
         [ProducesResponseType(typeof(EstadoResponse), (int)HttpStatusCode.OK)]
         [ProducesResponseType(typeof(ErrorResponse), (int)HttpStatusCode.BadRequest)]
         public IActionResult ConsultarEstado()
