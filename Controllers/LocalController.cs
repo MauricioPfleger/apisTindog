@@ -63,11 +63,11 @@ namespace TindogService.Controllers
         [HttpGet("v1/lista-cidades")]
         [ProducesResponseType(typeof(List<CidadeResponse>), (int)HttpStatusCode.OK)]
         [ProducesResponseType(typeof(ErrorResponse), (int)HttpStatusCode.BadRequest)]
-        public IActionResult ConsultarCidade()
+        public IActionResult ConsultarCidade([FromQuery] int idEstado)
         {
             try
             {
-                var listCidade = _localService.ConsultaCidades();
+                var listCidade = _localService.ConsultaCidades(idEstado);
 
                 if (listCidade.Count > 0)
                     return Ok(listCidade);

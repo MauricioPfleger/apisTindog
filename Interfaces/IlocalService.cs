@@ -7,7 +7,7 @@ namespace TindogService.Interfaces
     {
         public List<Pais> ConsultaPaises();
         public List<EstadoResponse> ConsultaEstados(int idPais);
-        public List<CidadeResponse> ConsultaCidades();
+        public List<CidadeResponse> ConsultaCidades(int idEstado);
 
 
     }

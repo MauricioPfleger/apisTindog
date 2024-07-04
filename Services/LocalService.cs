@@ -54,7 +54,7 @@ namespace TindogService.Services
             return listaPaises;
         }
 
-        public List<CidadeResponse> ConsultaCidades()
+        public List<CidadeResponse> ConsultaCidades(int idEstado)
         {
             List<CidadeResponse> listaCidade = new List<CidadeResponse>();
 
@@ -65,6 +65,7 @@ namespace TindogService.Services
             string query = Consulta.ConsultaCidades();
 
             MySqlCommand command = new MySqlCommand(query, connection);
+            command. Parameters.Add(new MySqlParameter("@id_estado", idEstado));
 
             connection.Open();
 
@@ -77,7 +78,7 @@ namespace TindogService.Services
                     CidadeResponse cidade = new CidadeResponse();
                     cidade.Id = reader.GetInt32("id_cidade");
                     cidade.Nome = reader.GetString("nome_cidade");
-                    cidade.NomeEstado = reader.GetString("nome_estado");
+                 
 
                     listaCidade.Add(cidade);
                 }
