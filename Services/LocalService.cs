@@ -17,6 +17,43 @@ namespace TindogService.Services
 
         // Acrescertar cada 1 o seu método de operação da integração com o banco de dados
 
+        public List<Pais> ConsultaPaises()
+        {
+            List<Pais> listaPaises = new List<Pais>();
+
+            string connectionString = _configuration.GetConnectionString("MySqlConnection");
+
+            MySqlConnection connection = new MySqlConnection(connectionString);
+
+            string query = Consulta.ConsultaPaises();
+
+            MySqlCommand command = new MySqlCommand(query, connection);
+
+            connection.Open();
+
+            try
+            {
+                MySqlDataReader reader = command.ExecuteReader();
+
+                while (reader.Read())
+                {
+                    Pais pais = new Pais();
+                    pais.Id = reader.GetInt32("id_pais");
+                    pais.Nome = reader.GetString("nome_pais");
+
+                    listaPaises.Add(pais);
+                }
+            }
+            catch
+            {
+                // connection.Close();
+            }
+
+            connection.Close();
+
+            return listaPaises;
+        }
+
         public List<CidadeResponse> ConsultaCidades()
         {
             List<CidadeResponse> listaCidade = new List<CidadeResponse>();
@@ -56,7 +93,7 @@ namespace TindogService.Services
         }
  
 
-        public List<EstadoResponse> ConsultaEstados()
+        public List<EstadoResponse> ConsultaEstados(int idPais)
         { 
                 List<EstadoResponse> listaEstado = new List<EstadoResponse>();
 
@@ -67,6 +104,7 @@ namespace TindogService.Services
                 string query = Consulta.ConsultaEstado();
 
                 MySqlCommand command = new MySqlCommand(query, connection);
+                command.Parameters.Add(new MySqlParameter("id_pais", idPais));
                 connection.Open();
 
                 try
@@ -78,7 +116,6 @@ namespace TindogService.Services
                         EstadoResponse estado = new EstadoResponse();
                         estado.Id = reader.GetInt32("id_estado");
                         estado.Nome = reader.GetString("nome_estado");
-                        estado.NomePais = reader.GetString("nome_pais");
                        
                         listaEstado.Add(estado);
                     }
