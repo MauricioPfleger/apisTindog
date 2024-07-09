@@ -4,6 +4,7 @@ using System.Data;
 using System.Net;
 using System.Reflection.PortableExecutable;
 using TindogService;
+using TindogService.Controllers.Request;
 using TindogService.Controllers.Responses;
 using TindogService.Interfaces;
 using TindogService.Objetos;
@@ -78,6 +79,20 @@ namespace TinDog.Controllers
             catch (Exception ex)
             {
                 return BadRequest(new ErrorResponse() { Mensagem = $"Endereço ou Tutor não encontrado.: {ex.Message}" }); // Acrescentar uma mensagem de erro que faça sentido
+            }
+        }
+
+        [HttpPost("v1/endereco")]
+        [ProducesResponseType(typeof(EnderecoResponse), (int)HttpStatusCode.OK)]
+        [ProducesResponseType(typeof(ErrorResponse), (int)HttpStatusCode.BadRequest)]
+        public IActionResult CadastrarEndereco([FromBody] EnderecoRequest enderecoRequest)
+        {
+            try
+            {
+                return Ok(_tutorService.CadastrarEndereco(enderecoRequest));
+            }
+            catch (Exception ex) { 
+                return BadRequest(new ErrorResponse() { Mensagem = $"Erro ao cadastrar o endereço: {ex.Message}"});
             }
         }
     }

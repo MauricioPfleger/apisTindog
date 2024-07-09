@@ -2,6 +2,8 @@
 using Org.BouncyCastle.Crypto.Macs;
 using System.Configuration;
 using TinDog.Controllers;
+using TindogService.Controllers.Request;
+using TindogService.Controllers.Responses;
 using TindogService.Interfaces;
 using TindogService.Objetos;
 using TindogService.Querys;
@@ -205,6 +207,31 @@ namespace TindogService.Services
             }
 
             return listaPets;
+        }
+
+        public EnderecoResponse CadastrarEndereco(EnderecoRequest enderecoRequest)
+        {
+            EnderecoResponse endereco = new EnderecoResponse();
+
+            string connectionString = _configuration.GetConnectionString("MySqlConnection");
+
+            MySqlConnection connection = new MySqlConnection(connectionString);
+
+            string comando = Executa.CadastrarEndereco();
+
+            MySqlCommand command = new MySqlCommand(comando, connection);
+            command.Parameters.Add(new MySqlParameter("@id_cidade", enderecoRequest.idCidade));
+            command.Parameters.Add(new MySqlParameter("@rua_endereco", enderecoRequest.rua));
+            command.Parameters.Add(new MySqlParameter("@numero_endereco", enderecoRequest.numero));
+            command.Parameters.Add(new MySqlParameter("@bairro_endereco", enderecoRequest.bairro));
+            command.Parameters.Add(new MySqlParameter("@cep_endereco", enderecoRequest.cep));
+            command.Parameters.Add(new MySqlParameter("@complemento_endereco", enderecoRequest.complemento));
+
+            connection.Open();
+
+            endereco.idEndereco = Convert.ToInt32(command.ExecuteScalar());
+
+            return endereco;
         }
     }
 }

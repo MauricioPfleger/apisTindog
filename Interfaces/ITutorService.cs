@@ -1,4 +1,6 @@
-﻿using TindogService.Objetos;
+﻿using TindogService.Controllers.Request;
+using TindogService.Controllers.Responses;
+using TindogService.Objetos;
 
 namespace TindogService.Interfaces
 {
@@ -8,6 +10,6 @@ namespace TindogService.Interfaces
         public List<Pet> ConsultarTutorPets(int idTutor);
         public Endereco? ConsultarTutorEndereco(int idTutor);
         public List<Pet> ConsultarPets(int idPais, int idEstado, int idCidade);
-        // Adicionar a interface do método que realiza a busca
+        public EnderecoResponse CadastrarEndereco(EnderecoRequest enderecoRequest);
     }
 }
