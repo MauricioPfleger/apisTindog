@@ -19,6 +19,10 @@ namespace TindogService.Services
             _configuration = configuration;
         }
 
+        public TutorService()
+        {
+        }
+
         public List<Tutor> ConsultarTutor(string nome)
         {
             List<Tutor> listaTutores = new List<Tutor>();
@@ -211,29 +215,6 @@ namespace TindogService.Services
 
         public EnderecoResponse CadastrarEndereco(EnderecoRequest enderecoRequest)
         {
-            if (enderecoRequest.idCidade == null || enderecoRequest.idCidade == 0)
-            {
-                throw new Exception("É necessário informar o Id da Cidade");
-            }
-
-            if (String.IsNullOrEmpty(enderecoRequest.rua))
-            {
-                throw new Exception("É necessário informar a Rua");
-            }
-
-            if (String.IsNullOrEmpty(enderecoRequest.bairro))
-            {
-                throw new Exception("É necessário informar o Bairro");
-            }
-
-            if (
-                (enderecoRequest.numero == null || enderecoRequest.numero == 0) &&              
-                String.IsNullOrEmpty(enderecoRequest.complemento)
-               )
-            {
-                throw new Exception("É necessário informar o Número ou o Complemento");
-            }
-            
             EnderecoResponse endereco = new EnderecoResponse();
 
             string connectionString = _configuration.GetConnectionString("MySqlConnection");
@@ -264,6 +245,32 @@ namespace TindogService.Services
             endereco.idEndereco = Convert.ToInt32(command.ExecuteScalar());
 
             return endereco;
+        }
+
+        public void ValidarTutorEndereco(EnderecoRequest enderecoRequest)
+        {
+            if (enderecoRequest.idCidade == null || enderecoRequest.idCidade == 0)
+            {
+                throw new Exception("É necessário informar o Id da Cidade");
+            }
+
+            if (String.IsNullOrEmpty(enderecoRequest.rua))
+            {
+                throw new Exception("É necessário informar a Rua");
+            }
+
+            if (String.IsNullOrEmpty(enderecoRequest.bairro))
+            {
+                throw new Exception("É necessário informar o Bairro");
+            }
+
+            if (
+                (enderecoRequest.numero == null || enderecoRequest.numero == 0) &&
+                String.IsNullOrEmpty(enderecoRequest.complemento)
+               )
+            {
+                throw new Exception("É necessário informar o Número ou o Complemento");
+            }
         }
     }
 }
