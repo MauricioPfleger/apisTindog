@@ -211,21 +211,53 @@ namespace TindogService.Services
 
         public EnderecoResponse CadastrarEndereco(EnderecoRequest enderecoRequest)
         {
+            if (enderecoRequest.idCidade == null || enderecoRequest.idCidade == 0)
+            {
+                throw new Exception("É necessário informar o Id da Cidade");
+            }
+
+            if (String.IsNullOrEmpty(enderecoRequest.rua))
+            {
+                throw new Exception("É necessário informar a Rua");
+            }
+
+            if (String.IsNullOrEmpty(enderecoRequest.bairro))
+            {
+                throw new Exception("É necessário informar o Bairro");
+            }
+
+            if (
+                (enderecoRequest.numero == null || enderecoRequest.numero == 0) &&              
+                String.IsNullOrEmpty(enderecoRequest.complemento)
+               )
+            {
+                throw new Exception("É necessário informar o Número ou o Complemento");
+            }
+            
             EnderecoResponse endereco = new EnderecoResponse();
 
             string connectionString = _configuration.GetConnectionString("MySqlConnection");
 
             MySqlConnection connection = new MySqlConnection(connectionString);
 
-            string comando = Executa.CadastrarEndereco();
+            string comando = Executa.CadastrarEndereco(enderecoRequest);
 
             MySqlCommand command = new MySqlCommand(comando, connection);
             command.Parameters.Add(new MySqlParameter("@id_cidade", enderecoRequest.idCidade));
             command.Parameters.Add(new MySqlParameter("@rua_endereco", enderecoRequest.rua));
-            command.Parameters.Add(new MySqlParameter("@numero_endereco", enderecoRequest.numero));
+            if (enderecoRequest.numero > 0)
+            {
+                command.Parameters.Add(new MySqlParameter("@numero_endereco", enderecoRequest.numero));
+            }
             command.Parameters.Add(new MySqlParameter("@bairro_endereco", enderecoRequest.bairro));
-            command.Parameters.Add(new MySqlParameter("@cep_endereco", enderecoRequest.cep));
-            command.Parameters.Add(new MySqlParameter("@complemento_endereco", enderecoRequest.complemento));
+            if (enderecoRequest.cep > 0)
+            {
+                command.Parameters.Add(new MySqlParameter("@cep_endereco", enderecoRequest.cep));
+            }
+            if (!String.IsNullOrEmpty(enderecoRequest.complemento))
+            {
+                command.Parameters.Add(new MySqlParameter("@complemento_endereco", enderecoRequest.complemento));
+            }
 
             connection.Open();
 

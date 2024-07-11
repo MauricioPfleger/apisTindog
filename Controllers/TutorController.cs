@@ -89,6 +89,7 @@ namespace TinDog.Controllers
         {
             try
             {
+                _tutorService.ValidarTutorEndereco(enderecoRequest);
                 return Ok(_tutorService.CadastrarEndereco(enderecoRequest));
             }
             catch (Exception ex) { 
