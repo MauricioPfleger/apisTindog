@@ -1,6 +1,10 @@
 ﻿using MySql.Data.MySqlClient;
+using Mysqlx.Crud;
 using Org.BouncyCastle.Crypto.Macs;
+using System.Collections.Generic;
 using System.Configuration;
+using System.Runtime.ConstrainedExecution;
+using System.Security.Cryptography;
 using TinDog.Controllers;
 using TindogService.Controllers.Request;
 using TindogService.Controllers.Responses;
@@ -13,10 +17,12 @@ namespace TindogService.Services
     public class TutorService : ITutorService
     {
         private readonly IConfiguration _configuration;
+        private readonly DataBaseConnection _connection;
 
-        public TutorService(IConfiguration configuration)
+        public TutorService(IConfiguration configuration, DataBaseConnection connection)
         {
             _configuration = configuration;
+            _connection = connection;
         }
 
         public TutorService()
@@ -27,18 +33,15 @@ namespace TindogService.Services
         {
             List<Tutor> listaTutores = new List<Tutor>();
 
-            string connectionString = _configuration.GetConnectionString("MySqlConnection");
-
-            MySqlConnection connection = new MySqlConnection(connectionString);
-
-            string query = Consulta.ConsultaTutor();
-
-            MySqlCommand command = new MySqlCommand(query, connection);
-            command.Parameters.Add(new MySqlParameter("@nome_tutor", nome));
-            connection.Open();
-
-            try
+            using (MySqlConnection connection = _connection.CreateConnection())
             {
+                string query = Consulta.ConsultaTutor();
+
+                MySqlCommand command = new MySqlCommand(query, connection);
+                command.Parameters.Add(new MySqlParameter("@nome_tutor", nome));
+
+                connection.Open();
+
                 MySqlDataReader reader = command.ExecuteReader();
 
                 while (reader.Read())
@@ -73,18 +76,13 @@ namespace TindogService.Services
                     pet.Genero = reader.GetString("genero_pet");
                     pet.QtdVacinas = reader.GetInt32("qtd_vacinas_pet");
                     pet.Pedigree = reader.GetInt32("pedigree_pet") == 1 ? true : false;
-
-                    tutor.Pets.Add(pet);
+                                       
+                    if (pet.Pedigree)
+                        tutor.Pets.Add(pet);
 
                     listaTutores.Add(tutor);
                 }
             }
-            catch
-            {
-                connection.Close();
-            }
-
-            connection.Close();
 
             return listaTutores;
         }
@@ -93,18 +91,15 @@ namespace TindogService.Services
         {
             List<Pet> listaPets = new List<Pet>();
 
-            string connectionString = _configuration.GetConnectionString("MySqlConnection");
-
-            MySqlConnection connection = new MySqlConnection(connectionString);
-
-            string query = Consulta.ConsultaTutorPets();
-
-            MySqlCommand command = new MySqlCommand(query, connection);
-            command.Parameters.Add(new MySqlParameter("@id_tutor", idTutor));
-            connection.Open();
-
-            try
+            using (MySqlConnection connection = _connection.CreateConnection())
             {
+                string query = Consulta.ConsultaTutorPets();
+
+                MySqlCommand command = new MySqlCommand(query, connection);
+                command.Parameters.Add(new MySqlParameter("@id_tutor", idTutor));
+
+                connection.Open();
+
                 MySqlDataReader reader = command.ExecuteReader();
 
                 while (reader.Read())
@@ -122,30 +117,21 @@ namespace TindogService.Services
                     listaPets.Add(pet);
                 }
             }
-            catch
-            {
-                // connection.Close();
-            }
-
-            connection.Close();
 
             return listaPets;
         }
 
         public Endereco? ConsultarTutorEndereco(int idTutor)
         {
-            string connectionString = _configuration.GetConnectionString("MySqlConnection");
-
-            MySqlConnection connection = new MySqlConnection(connectionString);
-
-            string query = Consulta.ConsultaTutorEndereco();
-
-            MySqlCommand command = new MySqlCommand(query, connection);
-            command.Parameters.Add(new MySqlParameter("@id_tutor", idTutor));
-            connection.Open();
-
-            try
+            using (MySqlConnection connection = _connection.CreateConnection())
             {
+                string query = Consulta.ConsultaTutorEndereco();
+
+                MySqlCommand command = new MySqlCommand(query, connection);
+                command.Parameters.Add(new MySqlParameter("@id_tutor", idTutor));
+
+                connection.Open();
+
                 MySqlDataReader reader = command.ExecuteReader();
 
                 if (reader.Read())
@@ -165,14 +151,8 @@ namespace TindogService.Services
                 }
                 else
                 {
-                    connection.Close();
                     return null;
                 }
-            }
-            catch
-            {
-                connection.Close();
-                return null;
             }
         }
 
@@ -180,34 +160,33 @@ namespace TindogService.Services
         {
             List<Pet> listaPets = new List<Pet>();
 
-            string connectionString = _configuration.GetConnectionString("MySqlConnection");
-
-            MySqlConnection connection = new MySqlConnection(connectionString);
-
-            string query = Consulta.ConsultaPets();
-
-            MySqlCommand command = new MySqlCommand(query, connection);
-            command.Parameters.Add(new MySqlParameter("@id_pais", idPais));
-            command.Parameters.Add(new MySqlParameter("@id_estado", idEstado));
-            command.Parameters.Add(new MySqlParameter("@id_cidade", idCidade));
-
-            connection.Open();
-
-            MySqlDataReader consulta = command.ExecuteReader();
-
-            while (consulta.Read())
+            using (MySqlConnection connection = _connection.CreateConnection())
             {
-                Pet pet = new Pet();
-                pet.Id = consulta.GetInt32("id_pet");
-                pet.Nome = consulta.GetString("nome_pet");
-                pet.Raca = consulta.GetString("nome_raca");
-                pet.DataNascimento = consulta.GetDateTime("dt_nascimento_pet");
-                pet.Peso = consulta.GetDouble("peso_pet");
-                pet.Genero = consulta.GetString("nome_genero");
-                pet.QtdVacinas = consulta.GetInt32("qtd_vacinas_pet");
-                pet.Pedigree = consulta.GetInt32("pedigree_pet") == 1 ? true : false;
+                string query = Consulta.ConsultaPets();
 
-                listaPets.Add(pet);
+                MySqlCommand command = new MySqlCommand(query, connection);
+                command.Parameters.Add(new MySqlParameter("@id_pais", idPais));
+                command.Parameters.Add(new MySqlParameter("@id_estado", idEstado));
+                command.Parameters.Add(new MySqlParameter("@id_cidade", idCidade));
+
+                connection.Open();
+
+                MySqlDataReader consulta = command.ExecuteReader();
+
+                while (consulta.Read())
+                {
+                    Pet pet = new Pet();
+                    pet.Id = consulta.GetInt32("id_pet");
+                    pet.Nome = consulta.GetString("nome_pet");
+                    pet.Raca = consulta.GetString("nome_raca");
+                    pet.DataNascimento = consulta.GetDateTime("dt_nascimento_pet");
+                    pet.Peso = consulta.GetDouble("peso_pet");
+                    pet.Genero = consulta.GetString("nome_genero");
+                    pet.QtdVacinas = consulta.GetInt32("qtd_vacinas_pet");
+                    pet.Pedigree = consulta.GetInt32("pedigree_pet") == 1 ? true : false;
+
+                    listaPets.Add(pet);
+                }
             }
 
             return listaPets;
@@ -217,32 +196,31 @@ namespace TindogService.Services
         {
             EnderecoResponse endereco = new EnderecoResponse();
 
-            string connectionString = _configuration.GetConnectionString("MySqlConnection");
-
-            MySqlConnection connection = new MySqlConnection(connectionString);
-
-            string comando = Executa.CadastrarEndereco(enderecoRequest);
-
-            MySqlCommand command = new MySqlCommand(comando, connection);
-            command.Parameters.Add(new MySqlParameter("@id_cidade", enderecoRequest.idCidade));
-            command.Parameters.Add(new MySqlParameter("@rua_endereco", enderecoRequest.rua));
-            if (enderecoRequest.numero > 0)
+            using (MySqlConnection connection = _connection.CreateConnection())
             {
-                command.Parameters.Add(new MySqlParameter("@numero_endereco", enderecoRequest.numero));
-            }
-            command.Parameters.Add(new MySqlParameter("@bairro_endereco", enderecoRequest.bairro));
-            if (enderecoRequest.cep > 0)
-            {
-                command.Parameters.Add(new MySqlParameter("@cep_endereco", enderecoRequest.cep));
-            }
-            if (!String.IsNullOrEmpty(enderecoRequest.complemento))
-            {
-                command.Parameters.Add(new MySqlParameter("@complemento_endereco", enderecoRequest.complemento));
-            }
+                string comando = Executa.CadastrarEndereco(enderecoRequest);
 
-            connection.Open();
+                MySqlCommand command = new MySqlCommand(comando, connection);
+                command.Parameters.Add(new MySqlParameter("@id_cidade", enderecoRequest.idCidade));
+                command.Parameters.Add(new MySqlParameter("@rua_endereco", enderecoRequest.rua));
+                if (enderecoRequest.numero > 0)
+                {
+                    command.Parameters.Add(new MySqlParameter("@numero_endereco", enderecoRequest.numero));
+                }
+                command.Parameters.Add(new MySqlParameter("@bairro_endereco", enderecoRequest.bairro));
+                if (enderecoRequest.cep > 0)
+                {
+                    command.Parameters.Add(new MySqlParameter("@cep_endereco", enderecoRequest.cep));
+                }
+                if (!String.IsNullOrEmpty(enderecoRequest.complemento))
+                {
+                    command.Parameters.Add(new MySqlParameter("@complemento_endereco", enderecoRequest.complemento));
+                }
 
-            endereco.idEndereco = Convert.ToInt32(command.ExecuteScalar());
+                connection.Open();
+
+                endereco.idEndereco = Convert.ToInt32(command.ExecuteScalar());
+            }
 
             return endereco;
         }
@@ -272,5 +250,47 @@ namespace TindogService.Services
                 throw new Exception("É necessário informar o Número ou o Complemento");
             }
         }
+
+        public bool Logar(LoginRequest loginRequest)
+        {
+            using (MySqlConnection connection = _connection.CreateConnection())
+            {
+                MySqlCommand comando = new MySqlCommand(Consulta.Login(), connection);
+                comando.Parameters.AddWithValue("@email", loginRequest.email);
+                comando.Parameters.AddWithValue("@senha", loginRequest.senha);
+
+                connection.Open();
+
+                MySqlDataReader consulta = comando.ExecuteReader();
+
+                return consulta.Read();
+            }
+        }
+
+        public bool AtualizarEndereco(int idEndereco, EnderecoRequest endereco)
+        {
+            using (MySqlConnection connection = _connection.CreateConnection())
+            {
+                MySqlCommand comando = new MySqlCommand(Executa.UpdateEndereco(), connection);
+                comando.Parameters.AddWithValue("@cidade", endereco.idCidade);
+                comando.Parameters.AddWithValue("@rua", endereco.rua);
+                comando.Parameters.AddWithValue("@numero", endereco.numero);
+                comando.Parameters.AddWithValue("@bairro", endereco.bairro);
+                comando.Parameters.AddWithValue("@cep", endereco.cep);
+                comando.Parameters.AddWithValue("@complemento", endereco.complemento);
+                comando.Parameters.AddWithValue("@id", idEndereco);
+
+                connection.Open();
+
+                var linhasAfetadas = comando.ExecuteNonQuery();
+
+                if (linhasAfetadas > 0)
+                    return true;
+
+                return false;
+            }
+        }
     }
 }
+    
+

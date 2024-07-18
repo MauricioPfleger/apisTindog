@@ -3,6 +3,7 @@ using System.Net;
 using TindogService.Controllers.Responses;
 using TindogService.Interfaces;
 using TindogService.Objetos;
+using TindogService.Querys;
 using TindogService.Services;
 
 namespace TindogService.Controllers
@@ -12,6 +13,7 @@ namespace TindogService.Controllers
     public class LocalController : ControllerBase
     {
         private readonly ILocalService _localService;
+        private readonly DataBaseConnection _connection;
 
         public LocalController(ILocalService localService)
         {

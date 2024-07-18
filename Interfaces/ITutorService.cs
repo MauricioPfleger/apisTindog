@@ -11,6 +11,8 @@ namespace TindogService.Interfaces
         public Endereco? ConsultarTutorEndereco(int idTutor);
         public List<Pet> ConsultarPets(int idPais, int idEstado, int idCidade);
         public EnderecoResponse CadastrarEndereco(EnderecoRequest enderecoRequest);
+        public bool AtualizarEndereco(int idEndereco, EnderecoRequest endereco);
         public void ValidarTutorEndereco(EnderecoRequest enderecoRequest);
+        public bool Logar(LoginRequest loginRequest);
     }
 }

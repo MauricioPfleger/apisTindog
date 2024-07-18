@@ -46,5 +46,12 @@ namespace TindogService.Querys
 
             return comando.ToString();
         }
+
+        public static string UpdateEndereco()
+        {
+            return @"UPDATE endereco SET id_cidade = @cidade, rua_endereco = @rua, numero_endereco = @numero, 
+                        bairro_endereco = @bairro, cep_endereco = @cep, complemento_endereco = @complemento
+                        where id_endereco = @id";
+        }
     }
 }

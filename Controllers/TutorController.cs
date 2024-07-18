@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using MySql.Data.MySqlClient;
 using System.Data;
+using System.Data.Common;
 using System.Net;
 using System.Reflection.PortableExecutable;
 using TindogService;
@@ -8,6 +9,8 @@ using TindogService.Controllers.Request;
 using TindogService.Controllers.Responses;
 using TindogService.Interfaces;
 using TindogService.Objetos;
+using TindogService.Querys;
+using TindogService.Services;
 
 namespace TinDog.Controllers
 {
@@ -94,6 +97,46 @@ namespace TinDog.Controllers
             }
             catch (Exception ex) { 
                 return BadRequest(new ErrorResponse() { Mensagem = $"Erro ao cadastrar o endereço: {ex.Message}"});
+            }
+        }
+
+        [HttpPut("v1/endereco/{id_endereco}")]
+        [ProducesResponseType(typeof(SuccessResponse), (int)HttpStatusCode.OK)]
+        [ProducesResponseType(typeof(ErrorResponse), (int)HttpStatusCode.BadRequest)]
+        public IActionResult AlterarEndereco([FromRoute] int id_endereco, [FromBody] EnderecoRequest enderecoRequest)
+        {
+            try
+            {
+
+                bool atualizou = _tutorService.AtualizarEndereco(id_endereco, enderecoRequest);
+                if (atualizou)
+                {
+                    return Ok(new SuccessResponse() { Mensagem = "Endereço atualizado com sucesso." });
+                }
+                
+                return BadRequest(new ErrorResponse() { Mensagem = "Não foi possível atualizar o endereço" });
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new ErrorResponse() { Mensagem = $"Ocorreu um erro ao tentar atualizar o endereço: {ex.Message}" });
+            }            
+        }
+
+        [HttpPost("v1/login")]
+        [ProducesResponseType(typeof(SuccessResponse), (int)HttpStatusCode.OK)]
+        [ProducesResponseType(typeof(ErrorResponse), (int)HttpStatusCode.BadRequest)]
+        public IActionResult Logar([FromBody] LoginRequest loginRequest)
+        {
+            try
+            {
+                if (_tutorService.Logar(loginRequest))
+                    return Ok(new SuccessResponse() { Mensagem = "Logado com sucesso." });
+
+                return BadRequest(new ErrorResponse() { Mensagem = "Login/senha inválido."});
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new ErrorResponse() { Mensagem = $"Erro ao efetuar o login: {ex.Message}" });
             }
         }
     }

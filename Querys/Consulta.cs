@@ -122,5 +122,9 @@ namespace TindogService.Querys
             return @"SELECT id_pais, nome_pais FROM pais ORDER BY nome_pais";
         }
 
+        public static string Login()
+        {
+            return @"SELECT 1 FROM TUTOR WHERE email_tutor = @email AND senha_tutor = @senha";
+        }
     }
 }

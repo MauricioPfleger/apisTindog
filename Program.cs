@@ -1,4 +1,5 @@
 using TindogService.Interfaces;
+using TindogService.Querys;
 using TindogService.Services;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -9,6 +10,7 @@ builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+builder.Services.AddSingleton<DataBaseConnection>();
 
 builder.Services.AddScoped<ITutorService, TutorService>();
 builder.Services.AddScoped<ILocalService, LocalService>();
@@ -22,10 +24,11 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-app.UseHttpsRedirection();
+//app.UseHttpsRedirection();
 
 app.UseAuthorization();
 
 app.MapControllers();
 
+//app.Run("http://*:7028");
 app.Run();
