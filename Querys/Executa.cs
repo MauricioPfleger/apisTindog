@@ -53,5 +53,10 @@ namespace TindogService.Querys
                         bairro_endereco = @bairro, cep_endereco = @cep, complemento_endereco = @complemento
                         where id_endereco = @id";
         }
+
+        public static string DeletarEndereco()
+        {
+            return "DELETE FROM endereco WHERE id_endereco = @id";
+        }
     }
 }

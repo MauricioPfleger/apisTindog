@@ -290,6 +290,21 @@ namespace TindogService.Services
                 return false;
             }
         }
+
+        public bool ExcluirEndereco(int idEndereco)
+        {
+            using (MySqlConnection connection = _connection.CreateConnection())
+            {
+                MySqlCommand comando = new MySqlCommand(Executa.DeletarEndereco(), connection);
+                comando.Parameters.AddWithValue("@id", idEndereco);
+
+                connection.Open();
+
+                var linhasAfetadas = comando.ExecuteNonQuery();
+
+                return linhasAfetadas > 0;
+            }
+        }
     }
 }
     

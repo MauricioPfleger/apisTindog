@@ -122,6 +122,27 @@ namespace TinDog.Controllers
             }            
         }
 
+        [HttpDelete("v1/endereco/{id_endereco}")]
+        [ProducesResponseType(typeof(SuccessResponse), (int)HttpStatusCode.OK)]
+        [ProducesResponseType(typeof(ErrorResponse), (int)HttpStatusCode.BadRequest)]
+        public IActionResult ExcluirEndereco([FromRoute] int id_endereco)
+        {
+            try
+            {
+                bool excluiu = _tutorService.ExcluirEndereco(id_endereco);
+                if (excluiu)
+                {
+                    return Ok(new SuccessResponse() { Mensagem = "Endereço excluído com sucesso." });
+                }
+
+                return BadRequest(new ErrorResponse() { Mensagem = "Não foi possível excluir o endereço" });
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new ErrorResponse() { Mensagem = $"Ocorreu um erro ao tentar excluir o endereço: {ex.Message}" });
+            }
+        }
+
         [HttpPost("v1/login")]
         [ProducesResponseType(typeof(SuccessResponse), (int)HttpStatusCode.OK)]
         [ProducesResponseType(typeof(ErrorResponse), (int)HttpStatusCode.BadRequest)]
