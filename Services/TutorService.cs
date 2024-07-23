@@ -76,7 +76,7 @@ namespace TindogService.Services
                     pet.Genero = reader.GetString("genero_pet");
                     pet.QtdVacinas = reader.GetInt32("qtd_vacinas_pet");
                     pet.Pedigree = reader.GetInt32("pedigree_pet") == 1 ? true : false;
-                                       
+
                     if (pet.Pedigree)
                         tutor.Pets.Add(pet);
 
@@ -297,6 +297,20 @@ namespace TindogService.Services
             {
                 MySqlCommand comando = new MySqlCommand(Executa.DeletarEndereco(), connection);
                 comando.Parameters.AddWithValue("@id", idEndereco);
+
+                connection.Open();
+
+                var linhasAfetadas = comando.ExecuteNonQuery();
+
+                return linhasAfetadas > 0;
+            }
+        }
+        public bool ExcluirTutor(int idTutor)
+        {
+            using (MySqlConnection connection = _connection.CreateConnection())
+            {
+                MySqlCommand comando = new MySqlCommand(Executa.DeletarTutor(), connection);
+                comando.Parameters.AddWithValue("@id", idTutor);
 
                 connection.Open();
 

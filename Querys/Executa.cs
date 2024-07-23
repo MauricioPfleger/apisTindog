@@ -58,5 +58,9 @@ namespace TindogService.Querys
         {
             return "DELETE FROM endereco WHERE id_endereco = @id";
         }
+        public static string DeletarTutor()
+        {
+            return "DELETE FROM tutor WHERE id_tutor = @id";
+        }
     }
 }

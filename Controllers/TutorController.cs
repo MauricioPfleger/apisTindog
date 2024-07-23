@@ -160,5 +160,27 @@ namespace TinDog.Controllers
                 return BadRequest(new ErrorResponse() { Mensagem = $"Erro ao efetuar o login: {ex.Message}" });
             }
         }
+        [HttpDelete("v1/tutor/{id_tutor}")]
+        [ProducesResponseType(typeof(SuccessResponse), (int)HttpStatusCode.OK)]
+        [ProducesResponseType(typeof(ErrorResponse), (int)HttpStatusCode.BadRequest)]
+        public IActionResult ExcluirTutor([FromRoute] int id_tutor)
+        {
+            try
+            {
+                bool excluiu = _tutorService.ExcluirTutor(id_tutor);
+                if (excluiu)
+                {
+                    return Ok(new SuccessResponse() { Mensagem = "Tutor excluído com sucesso." });
+                }
+
+                return BadRequest(new ErrorResponse() { Mensagem = "Não foi possível excluir o tutor" });
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new ErrorResponse() { Mensagem = $"Ocorreu um erro ao tentar excluir o tutor: {ex.Message}" });
+            }
+        }
+
     }
+
 }

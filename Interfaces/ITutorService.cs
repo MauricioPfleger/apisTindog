@@ -15,5 +15,7 @@ namespace TindogService.Interfaces
         public void ValidarTutorEndereco(EnderecoRequest enderecoRequest);
         public bool Logar(LoginRequest loginRequest);
         public bool ExcluirEndereco(int idEndereco);
+        public bool ExcluirTutor(int idTutor);
+
     }
 }
