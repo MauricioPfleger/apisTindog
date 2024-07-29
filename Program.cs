@@ -13,6 +13,7 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddSingleton<DataBaseConnection>();
 
 builder.Services.AddScoped<ITutorService, TutorService>();
+builder.Services.AddScoped<IPetService, PetService>();
 builder.Services.AddScoped<ILocalService, LocalService>();
 
 var app = builder.Build();

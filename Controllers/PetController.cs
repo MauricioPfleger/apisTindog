@@ -7,11 +7,11 @@ namespace TindogService.Controllers
     [Route("[controller]")]
     public class PetController
     {
-        private readonly ITutorService _tutorService;
+        private readonly IPetService _petService;
 
-        public PetController(ITutorService tutorService)
+        public PetController(IPetService petService)
         {
-            _tutorService = tutorService;
+            _petService = petService;
         }
     }
 }
