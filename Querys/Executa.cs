@@ -8,7 +8,7 @@ namespace TindogService.Querys
         public static string CadastrarEndereco(EnderecoRequest enderecoRequest)
         {
             StringBuilder comando = new StringBuilder();
-            comando.Append("INSERT INTO dbtindog.endereco (id_cidade, rua_endereco, bairro_endereco");
+            comando.Append("INSERT INTO dbtindog.endereco (id_cidade, rua_endereco, bairro_endereco,");
 
             if (enderecoRequest.numero > 0)
             {
@@ -46,6 +46,32 @@ namespace TindogService.Querys
 
             return comando.ToString();
         }
+        public static string inserirPet() 
+            {
+            return @"INSERT INTO `dbtindog`.`pet`
+                    (
+                    `id_tutor`,
+                    `nome_pet`,
+                    `id_raca`,
+                    `dt_nascimento_pet`,
+                    `peso_pet`,
+                    `id_genero`,
+                    `qtd_vacinas_pet`,
+                    `pedigree_pet`)
+                    VALUES
+                    (
+                    @id_tutor,
+                    @nome_pet,
+                    @id_raca,
+                    @dt_nascimento_pet,
+                    @peso_pet,
+                    @id_genero,
+                    @qtd_vacinas_pet,
+                    @pedigree_pet;
+                    ";
+        
+            }
+
 
         public static string UpdateEndereco()
         {

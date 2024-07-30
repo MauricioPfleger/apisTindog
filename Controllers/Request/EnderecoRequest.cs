@@ -9,4 +9,4 @@
         public long? cep { get; set; }            
         public string? complemento { get; set; }
     }
-}
+}   
