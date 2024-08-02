@@ -29,6 +29,12 @@ namespace TindogService.Services
                 command.Parameters.Add(new MySqlParameter("@id_genero", pet.Genero));
                 command.Parameters.Add(new MySqlParameter("@qtd_vacinas_pet", pet.QtdVacinas));
                 command.Parameters.Add(new MySqlParameter("@pedigree_pet", pet.Pedigree? 1:0));
+
+                connection.Open();
+
+                var linhasAfetadas = command.ExecuteNonQuery();
+
+                return linhasAfetadas > 0;
             }
         }
     }

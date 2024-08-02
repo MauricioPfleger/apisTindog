@@ -67,7 +67,7 @@ namespace TindogService.Querys
                     @peso_pet,
                     @id_genero,
                     @qtd_vacinas_pet,
-                    @pedigree_pet;
+                    @pedigree_pet)
                     ";
         
             }
