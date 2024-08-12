@@ -17,7 +17,7 @@ namespace TindogService.Controllers
         {
             _petService = petService;
         }
-        [HttpPost("v1/pet/{id_tutor}")]
+        [HttpPost("v1/{id_tutor}")]
         [ProducesResponseType(typeof(SuccessResponse), (int)HttpStatusCode.OK)]
         [ProducesResponseType(typeof(ErrorResponse), (int)HttpStatusCode.BadRequest)]
         public IActionResult CadastrarPet([FromRoute] int id_tutor, [FromBody] PetRequest PetRequest)

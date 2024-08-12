@@ -143,24 +143,7 @@ namespace TinDog.Controllers
             }
         }
 
-        [HttpPost("v1/login")]
-        [ProducesResponseType(typeof(SuccessResponse), (int)HttpStatusCode.OK)]
-        [ProducesResponseType(typeof(ErrorResponse), (int)HttpStatusCode.BadRequest)]
-        public IActionResult Logar([FromBody] LoginRequest loginRequest)
-        {
-            try
-            {
-                if (_tutorService.Logar(loginRequest))
-                    return Ok(new SuccessResponse() { Mensagem = "Logado com sucesso." });
-
-                return BadRequest(new ErrorResponse() { Mensagem = "Login/senha inválido."});
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(new ErrorResponse() { Mensagem = $"Erro ao efetuar o login: {ex.Message}" });
-            }
-        }
-        [HttpDelete("v1/tutor/{id_tutor}")]
+        [HttpDelete("v1/{id_tutor}")]
         [ProducesResponseType(typeof(SuccessResponse), (int)HttpStatusCode.OK)]
         [ProducesResponseType(typeof(ErrorResponse), (int)HttpStatusCode.BadRequest)]
         public IActionResult ExcluirTutor([FromRoute] int id_tutor)
@@ -181,6 +164,23 @@ namespace TinDog.Controllers
             }
         }
 
+        [HttpPost("v1/login")]
+        [ProducesResponseType(typeof(SuccessResponse), (int)HttpStatusCode.OK)]
+        [ProducesResponseType(typeof(ErrorResponse), (int)HttpStatusCode.BadRequest)]
+        public IActionResult Logar([FromBody] LoginRequest loginRequest)
+        {
+            try
+            {
+                if (_tutorService.Logar(loginRequest))
+                    return Ok(new SuccessResponse() { Mensagem = "Logado com sucesso." });
+
+                return BadRequest(new ErrorResponse() { Mensagem = "Login/senha inválido."});
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new ErrorResponse() { Mensagem = $"Erro ao efetuar o login: {ex.Message}" });
+            }
+        }
     }
 
 }
