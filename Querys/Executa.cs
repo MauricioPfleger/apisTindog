@@ -88,5 +88,18 @@ namespace TindogService.Querys
         {
             return "DELETE FROM tutor WHERE id_tutor = @id";
         }
+        public static string AtualizarPet()
+        {
+            return @"UPDATE `dbtindog`.`pet`
+                SET
+                `nome_pet` = @nomePet, 
+                `id_raca` = @raca,
+                `dt_nascimento_pet` = @DataPet,
+                `peso_pet` = @pesoPet,
+                `id_genero` = @genero,
+                `qtd_vacinas_pet` = @qtdVacinas,
+                `pedigree_pet` = @pedigree
+                WHERE `id_pet` = @idPet;";  
+        }
     }
 }

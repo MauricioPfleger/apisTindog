@@ -17,6 +17,7 @@ namespace TindogService.Controllers
         {
             _petService = petService;
         }
+
         [HttpPost("v1/{id_tutor}")]
         [ProducesResponseType(typeof(SuccessResponse), (int)HttpStatusCode.OK)]
         [ProducesResponseType(typeof(ErrorResponse), (int)HttpStatusCode.BadRequest)]
@@ -36,6 +37,28 @@ namespace TindogService.Controllers
             catch (Exception ex)
             {
                 return BadRequest(new ErrorResponse() { Mensagem = $"Erro ao cadastrar o pet: {ex.Message}" });
+            }
+        }
+
+        [HttpPut("v1/{id_pet}")]
+        [ProducesResponseType(typeof(SuccessResponse), (int)HttpStatusCode.OK)]
+        [ProducesResponseType(typeof(ErrorResponse), (int)HttpStatusCode.BadRequest)]
+        public IActionResult AtualizarPet([FromRoute] int id_pet, [FromBody] PetRequest PetRequest)
+        {
+            try
+            {
+                bool atualizou = _petService.AtualizarPet(id_pet, PetRequest);
+                if (atualizou)
+                {
+                    return Ok(new SuccessResponse() { Mensagem = "Informações do pet atualizada com sucesso." });
+                }
+
+                return BadRequest(new ErrorResponse() { Mensagem = "Não foi possível atualizar as informações do pet." });
+
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new ErrorResponse() { Mensagem = $"Erro ao atualizar as informações do pet: {ex.Message}" });
             }
         }
     }

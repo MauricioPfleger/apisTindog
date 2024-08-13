@@ -6,8 +6,9 @@ namespace TindogService.Interfaces
     public interface IPetService
     {
         public bool inserirPet(int idTutor, PetRequest pet);
+        public bool AtualizarPet(int idPet, PetRequest pet);
 
-        
-            
+
+
     }
 }
