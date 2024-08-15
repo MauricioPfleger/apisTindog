@@ -61,5 +61,19 @@ namespace TindogService.Services
                 return linhasAfetadas > 0;
             }
         }
+        public bool ExcluirPet(int idPet)
+        {
+            using (MySqlConnection connection = _connection.CreateConnection())
+            {
+                MySqlCommand comando = new MySqlCommand(Executa.DeletarPet(), connection);
+                comando.Parameters.AddWithValue("@id", idPet);
+
+                connection.Open();
+
+                var linhasAfetadas = comando.ExecuteNonQuery();
+
+                return linhasAfetadas > 0;
+            }
+        }
     }
 }

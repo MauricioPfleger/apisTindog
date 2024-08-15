@@ -88,6 +88,11 @@ namespace TindogService.Querys
         {
             return "DELETE FROM tutor WHERE id_tutor = @id";
         }
+
+        public static string DeletarPet()
+        {
+            return "DELETE FROM pet WHERE id_pet = @id";
+        }
         public static string AtualizarPet()
         {
             return @"UPDATE `dbtindog`.`pet`

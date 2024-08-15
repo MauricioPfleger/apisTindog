@@ -61,5 +61,25 @@ namespace TindogService.Controllers
                 return BadRequest(new ErrorResponse() { Mensagem = $"Erro ao atualizar as informações do pet: {ex.Message}" });
             }
         }
+        [HttpDelete("v1/{id_pet}")]
+        [ProducesResponseType(typeof(SuccessResponse), (int)HttpStatusCode.OK)]
+        [ProducesResponseType(typeof(ErrorResponse), (int)HttpStatusCode.BadRequest)]
+        public IActionResult ExcluirPet([FromRoute] int id_pet)
+        {
+            try
+            {
+                bool excluiu = _petService.ExcluirPet(id_pet);
+                if (excluiu)
+                {
+                    return Ok(new SuccessResponse() { Mensagem = "Pet excluído com sucesso." });
+                }
+
+                return BadRequest(new ErrorResponse() { Mensagem = "Não foi possível excluir o pet" });
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new ErrorResponse() { Mensagem = $"Ocorreu um erro ao tentar excluir o pet: {ex.Message}" });
+            }
+        }
     }
 }
