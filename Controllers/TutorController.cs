@@ -25,14 +25,14 @@ namespace TinDog.Controllers
             _tutorService = tutorService;
         }
 
-        [HttpGet("v1/informacoes")]
+        [HttpGet("v1/{idTutor}")]
         [ProducesResponseType(typeof(Tutor), (int)HttpStatusCode.OK)]
         [ProducesResponseType(typeof(ErrorResponse), (int)HttpStatusCode.BadRequest)]
-        public IActionResult ConsultarTutor([FromQuery] string nome)
+        public IActionResult ConsultarTutor([FromRoute] int idTutor)
         {
             try
             {
-                var listaTutores = _tutorService.ConsultarTutor(nome);
+                var listaTutores = _tutorService.ConsultarTutor(idTutor);
 
                 if (listaTutores.Count > 0)
                     return Ok(listaTutores);
@@ -120,27 +120,6 @@ namespace TinDog.Controllers
             {
                 return BadRequest(new ErrorResponse() { Mensagem = $"Ocorreu um erro ao tentar atualizar o endereço: {ex.Message}" });
             }            
-        }
-
-        [HttpDelete("v1/endereco/{id_endereco}")]
-        [ProducesResponseType(typeof(SuccessResponse), (int)HttpStatusCode.OK)]
-        [ProducesResponseType(typeof(ErrorResponse), (int)HttpStatusCode.BadRequest)]
-        public IActionResult ExcluirEndereco([FromRoute] int id_endereco)
-        {
-            try
-            {
-                bool excluiu = _tutorService.ExcluirEndereco(id_endereco);
-                if (excluiu)
-                {
-                    return Ok(new SuccessResponse() { Mensagem = "Endereço excluído com sucesso." });
-                }
-
-                return BadRequest(new ErrorResponse() { Mensagem = "Não foi possível excluir o endereço" });
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(new ErrorResponse() { Mensagem = $"Ocorreu um erro ao tentar excluir o endereço: {ex.Message}" });
-            }
         }
 
         [HttpDelete("v1/{id_tutor}")]

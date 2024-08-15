@@ -11,6 +11,7 @@ namespace TindogService.Querys
                 t.sobrenome_tutor,
                 t.dt_nascimento_tutor,
                 t.telefone_tutor,
+                t.email_tutor,
                 g.nome_genero genero_tutor,
                 pe.nome_pet,
                 r.nome_raca,
@@ -38,7 +39,7 @@ namespace TindogService.Querys
                 join pet pe on pe.id_tutor = t.id_tutor
                 join raca r on r.id_raca = pe.id_raca
                 join genero pg on pg.id_genero = pe.id_genero
-                where t.nome_tutor = @nome_tutor";
+                where t.id_tutor = @id_tutor";
         }
 
         public static string ConsultaTutorPets()

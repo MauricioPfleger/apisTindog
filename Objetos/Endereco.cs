@@ -9,7 +9,7 @@
         public string? Cidade { get; set; }
         public string? Estado { get; set; }
         public string? Pais { get; set; }
-        public int Cep { get; set; }
+        public long? Cep { get; set; }
         public string? Complemento { get; set; }
 
         public Endereco()

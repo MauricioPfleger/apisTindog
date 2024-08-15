@@ -80,13 +80,11 @@ namespace TindogService.Querys
                         where id_endereco = @id";
         }
 
-        public static string DeletarEndereco()
-        {
-            return "DELETE FROM endereco WHERE id_endereco = @id";
-        }
         public static string DeletarTutor()
         {
-            return "DELETE FROM tutor WHERE id_tutor = @id";
+            return @"DELETE FROM pet WHERE id_tutor = @id;
+                     DELETE FROM tutor WHERE id_tutor = @id;
+                     DELETE FROM endereco WHERE id_endereco = @id_endereco;";
         }
 
         public static string DeletarPet()

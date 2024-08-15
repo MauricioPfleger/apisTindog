@@ -3,6 +3,7 @@ using Mysqlx.Crud;
 using Org.BouncyCastle.Crypto.Macs;
 using System.Collections.Generic;
 using System.Configuration;
+using System.Data;
 using System.Runtime.ConstrainedExecution;
 using System.Security.Cryptography;
 using TinDog.Controllers;
@@ -29,7 +30,7 @@ namespace TindogService.Services
         {
         }
 
-        public List<Tutor> ConsultarTutor(string nome)
+        public List<Tutor> ConsultarTutor(int id_tutor)
         {
             List<Tutor> listaTutores = new List<Tutor>();
 
@@ -38,7 +39,7 @@ namespace TindogService.Services
                 string query = Consulta.ConsultaTutor();
 
                 MySqlCommand command = new MySqlCommand(query, connection);
-                command.Parameters.Add(new MySqlParameter("@nome_tutor", nome));
+                command.Parameters.Add(new MySqlParameter("@id_tutor", id_tutor));
 
                 connection.Open();
 
@@ -56,14 +57,16 @@ namespace TindogService.Services
                         tutor.Sobrenome = reader.GetString("sobrenome_tutor");
                         tutor.DataNascimento = reader.GetDateTime("dt_nascimento_tutor");
                         tutor.Telefone = reader.GetInt64("telefone_tutor");
+                        tutor.Email = reader.GetString("email_tutor");
                         tutor.Genero = reader.GetString("genero_tutor");
                         tutor.Endereco.Id = reader.GetInt32("id_endereco");
                         tutor.Endereco.Rua = reader.GetString("rua_endereco");
                         tutor.Endereco.Numero = reader.GetInt32("numero_endereco");
                         tutor.Endereco.Bairro = reader.GetString("bairro_endereco");
                         tutor.Endereco.Cidade = reader.GetString("nome_cidade");
-                        tutor.Endereco.Estado = reader.GetString("nome_estado");
-                        tutor.Endereco.Cep = reader.GetInt32("cep_endereco");
+                        tutor.Endereco.Estado = reader.GetString("nome_estado");  
+                        if (!reader.IsDBNull("cep_endereco"))
+                            tutor.Endereco.Cep = reader.GetInt64("cep_endereco");
                         tutor.Endereco.Pais = reader.GetString("nome_pais");
                     }
 
@@ -76,9 +79,8 @@ namespace TindogService.Services
                     pet.Genero = reader.GetString("genero_pet");
                     pet.QtdVacinas = reader.GetInt32("qtd_vacinas_pet");
                     pet.Pedigree = reader.GetInt32("pedigree_pet") == 1 ? true : false;
-
-                    if (pet.Pedigree)
-                        tutor.Pets.Add(pet);
+                                        
+                    tutor.Pets.Add(pet);
 
                     listaTutores.Add(tutor);
                 }
@@ -291,26 +293,36 @@ namespace TindogService.Services
             }
         }
 
-        public bool ExcluirEndereco(int idEndereco)
-        {
-            using (MySqlConnection connection = _connection.CreateConnection())
-            {
-                MySqlCommand comando = new MySqlCommand(Executa.DeletarEndereco(), connection);
-                comando.Parameters.AddWithValue("@id", idEndereco);
-
-                connection.Open();
-
-                var linhasAfetadas = comando.ExecuteNonQuery();
-
-                return linhasAfetadas > 0;
-            }
-        }
         public bool ExcluirTutor(int idTutor)
         {
             using (MySqlConnection connection = _connection.CreateConnection())
             {
+                string query = Consulta.ConsultaTutorEndereco();
+
+                MySqlCommand command = new MySqlCommand(query, connection);
+                command.Parameters.Add(new MySqlParameter("@id_tutor", idTutor));
+
+                connection.Open();
+
+                MySqlDataReader reader = command.ExecuteReader();
+
+                int idEndereco = 0;
+
+                if (reader.Read())
+                {
+                    idEndereco = reader.GetInt32("id_endereco");
+                }
+
+                if (idEndereco == 0)
+                {
+                    return false;
+                }
+
+                connection.Close();
+
                 MySqlCommand comando = new MySqlCommand(Executa.DeletarTutor(), connection);
                 comando.Parameters.AddWithValue("@id", idTutor);
+                comando.Parameters.AddWithValue("@id_endereco", idEndereco);
 
                 connection.Open();
 
