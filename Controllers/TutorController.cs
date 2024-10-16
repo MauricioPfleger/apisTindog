@@ -144,14 +144,15 @@ namespace TinDog.Controllers
         }
 
         [HttpPost("v1/login")]
-        [ProducesResponseType(typeof(SuccessResponse), (int)HttpStatusCode.OK)]
+        [ProducesResponseType(typeof(LoginResponse), (int)HttpStatusCode.OK)]
         [ProducesResponseType(typeof(ErrorResponse), (int)HttpStatusCode.BadRequest)]
         public IActionResult Logar([FromBody] LoginRequest loginRequest)
         {
             try
             {
-                if (_tutorService.Logar(loginRequest))
-                    return Ok(new SuccessResponse() { Mensagem = "Logado com sucesso." });
+                var idTutor = _tutorService.Logar(loginRequest);
+                if (idTutor > 0)
+                    return Ok(new LoginResponse() { Id = idTutor, Mensagem = "Logado com sucesso." });
 
                 return BadRequest(new ErrorResponse() { Mensagem = "Login/senha inválido."});
             }

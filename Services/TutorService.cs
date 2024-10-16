@@ -253,7 +253,7 @@ namespace TindogService.Services
             }
         }
 
-        public bool Logar(LoginRequest loginRequest)
+        public int Logar(LoginRequest loginRequest)
         {
             using (MySqlConnection connection = _connection.CreateConnection())
             {
@@ -265,7 +265,11 @@ namespace TindogService.Services
 
                 MySqlDataReader consulta = comando.ExecuteReader();
 
-                return consulta.Read();
+                if (consulta.Read()) {
+                    return consulta.GetInt32("id_tutor");
+                }
+
+                return 0;
             }
         }
 

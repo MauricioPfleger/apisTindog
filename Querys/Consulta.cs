@@ -125,7 +125,7 @@ namespace TindogService.Querys
 
         public static string Login()
         {
-            return @"SELECT 1 FROM TUTOR WHERE email_tutor = @email AND senha_tutor = @senha";
+            return @"SELECT id_tutor FROM TUTOR WHERE email_tutor = @email AND senha_tutor = @senha";
         }
     }
 }

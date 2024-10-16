@@ -13,7 +13,7 @@ namespace TindogService.Interfaces
         public EnderecoResponse CadastrarEndereco(EnderecoRequest enderecoRequest);
         public bool AtualizarEndereco(int idEndereco, EnderecoRequest endereco);
         public void ValidarTutorEndereco(EnderecoRequest enderecoRequest);
-        public bool Logar(LoginRequest loginRequest);
+        public int Logar(LoginRequest loginRequest);
         public bool ExcluirTutor(int idTutor);
 
     }
